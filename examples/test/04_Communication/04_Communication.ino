@@ -1,10 +1,16 @@
-/*
- * Author: pan
+/*!
+ * @file 04_Communication.ino
+ * @brief Examples of communication.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
  */
-
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "MuVisionSensor.h"
+#include "DFRobot_MuVisionSensor.h"
 #include <Wire.h>
 
 /*
@@ -55,7 +61,7 @@
 /*
  * Functions
  */
-MuVisionSensor MU(MU_DEVICE_ADDRESS); // 0x60 is device address
+DFRobot_MuVisionSensor MU(MU_DEVICE_ADDRESS); // 0x60 is device address
 
 #ifdef OUTPUT_MODE_SOFT_SERIAL
 SoftwareSerial SoftSerial(SOFT_SERIAL_RX_PIN, SOFT_SERIAL_TX_PIN);  // RX, TX  // The hardware serial port is used for log output, so we use soft serial port
@@ -78,42 +84,42 @@ void setup() {
 #ifdef OUTPUT_MODE_SOFT_SERIAL
   uint32_t BaudList[8] = {9600,19200,38400,57600,115200};
   SoftSerial.setTimeout(100);
-  uint8_t data_read = 0;
+  uint8_t dataRead = 0;
   for (int i = 0; i < 8; i++) {
     Serial.print("Baud Check:");
     Serial.println(BaudList[i]);
     SoftSerial.begin(BaudList[i]);
     delay(100);
-    data_read = 0;
+    dataRead = 0;
     Register.Set(0x25, 0xAA);
-    Register.Get(0x25, &data_read);
-    if (data_read == 0xAA) {
+    Register.Get(0x25, &dataRead);
+    if (dataRead == 0xAA) {
       break;
     }
   }
   MU.begin(&SoftSerial);   // Soft Uart/Serial
-  MU.UartSetBaudrate(BAUDRATE);
+  MU.uartSetBaudrate(BAUDRATE);
   delay(100);
   SoftSerial.begin(BaudList[BAUDRATE]);
   
 #elif OUTPUT_MODE_HARD_SERIAL
   uint32_t BaudList[8] = {9600,19200,38400,57600,115200};
   SoftSerial.setTimeout(100);
-  uint8_t data_read = 0;
+  uint8_t dataRead = 0;
   for (int i = 0; i < 8; i++) {
     Serial.print("Baud Check:");
     Serial.println(BaudList[i]);
     Serial1.begin(BaudList[i]);
     delay(100);
-    data_read = 0;
+    dataRead = 0;
     Register.Set(0x25, 0xAA);
-    Register.Get(0x25, &data_read);
-    if (data_read == 0xAA) {
+    Register.Get(0x25, &dataRead);
+    if (dataRead == 0xAA) {
       break;
     }
   }
   MU.begin(&Serial1);   // Hard Uart/Serial
-  MU.UartSetBaudrate(BAUDRATE);
+  MU.uartSetBaudrate(BAUDRATE);
   delay(100);
   Serial1.begin(BaudList[BAUDRATE]);
   
@@ -125,39 +131,39 @@ void setup() {
   Serial.println("Finised");
 
   Serial.println("Vision begin...");
-  MU.VisionBegin(VISION_TYPE);
+  MU.visionBegin(VISION_TYPE);
 
   Serial.println("Finished");
   Serial.println("MU Vision Sensor Processing...");
 }
   
 void loop() {
-  unsigned long time_start = 0;
-  float average_time = 0.0;
-  unsigned long success_send = 0;
-  unsigned long total_send = 0;
-  uint8_t data_write = 0;
-  uint8_t data_read = 0;
+  unsigned long timeStart = 0;
+  float averageTime = 0.0;
+  unsigned long successSend = 0;
+  unsigned long totalSend = 0;
+  uint8_t dataWrite = 0;
+  uint8_t dataRead = 0;
   while (1) {
-    time_start = millis();
-    for (uint8_t data_write = 0; data_write < 100; data_write++) {
-      Register.Set(0x25, data_write);
-      Register.Get(0x25, &data_read);
-      if (data_write == data_read) {
-        success_send++;
+    timeStart = millis();
+    for (uint8_t dataWrite = 0; dataWrite < 100; dataWrite++) {
+      Register.Set(0x25, dataWrite);
+      Register.Get(0x25, &dataRead);
+      if (dataWrite == dataRead) {
+        successSend++;
       }
-      total_send++;
+      totalSend++;
     }
-    average_time = (float)(millis()-time_start) / 100;
+    averageTime = (float)(millis()-timeStart) / 100;
     
     Serial.print("total send:");
-    Serial.print(total_send);
+    Serial.print(totalSend);
     Serial.print("  successed:");
-    Serial.print(success_send);
+    Serial.print(successSend);
     Serial.print("  success rate:");
-    Serial.print((float)success_send / (float)total_send * 100);
+    Serial.print((float)successSend / (float)totalSend * 100);
     Serial.print("  r/w average time:");
-    Serial.print(average_time);
+    Serial.print(averageTime);
     Serial.println("ms");
   }
 }

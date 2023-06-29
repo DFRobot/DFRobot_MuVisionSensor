@@ -1,17 +1,13 @@
-// Copyright 2018 Morpx Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/*!
+ * @file muVisionSensorType.h
+ * @brief Basic struct of sensor type class.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #ifndef MUVISIONSENSOR_SRC_MUVISIONSENSOR_TYPE_H_
 #define MUVISIONSENSOR_SRC_MUVISIONSENSOR_TYPE_H_
 
@@ -67,7 +63,7 @@ typedef enum {
   kVisionTrafficCard  = 7,
   kVisionNumberCard   = 8,
   kVisionMaxType         ,
-} MuVsMessageVisionType;
+} muVsMessageVisionType;
 typedef enum {
   kLedClose           = 0,
   kLedRed             = 1,
@@ -92,7 +88,7 @@ typedef enum {
   kRegI2C             = 0x0A,
   kRegIO              = 0x0B,
   kRegBle             = 0x0C,
-  kRegCameraConfig1   = 0x10,
+  kRegCameraConfig   = 0x10,
   kRegFrameCount      = 0x1F,
   kRegVisionId        = 0x20,
   kRegVisionConfig1   = 0x21,
@@ -125,7 +121,7 @@ typedef enum {
 typedef enum {
   kSerialMode,
   kI2CMode,
-} MuVsMode;
+} muVsMode;
 typedef enum {
   kBaud9600     = 0x00,
   kBaud19200    = 0x01,
@@ -135,7 +131,7 @@ typedef enum {
   kBaud230400   = 0x05,
   kBaud460800   = 0x06,
   kBaud921600   = 0x07,
-} MuVsBaudrate;
+} muVsBaudrate;
 typedef enum {
   kStatus,        // whether the target is detected
   kXValue,        // target horizontal position
@@ -152,7 +148,7 @@ typedef enum {
   kCallBackMode = 0,      // u need send a request first, and wait for response
   kDataFlowMode = 1,      // MU will automatically response the result of the vision that u enabled, whether it detected or undetected
   kEventMode    = 2,      // MU can only automatically response the result of the vision that u enabled, which detected target
-} MuVsStreamOutputMode;
+} muVsStreamOutputMode;
 typedef enum {
   kZoomDefault  = 0,
   kZoom1        = 1,
@@ -160,23 +156,23 @@ typedef enum {
   kZoom3        = 3,
   kZoom4        = 4,
   kZoom5        = 5,
-} MuVsCameraZoom;
+} muVsCameraZoom;
 typedef enum {
   kFPSNormal        = 0,          // 25FPS mode
   kFPSHigh          = 1,          // 50FPS mode
-} MuVsCameraFPS;
+} muVsCameraFPS;
 typedef enum {
   kAutoWhiteBalance       = 0,    // auto white balance mode
   kLockWhiteBalance       = 1,    // lock white balance with current value, the entire process takes about 100ms
   kWhiteLight             = 2,    // white light mode
   kYellowLight            = 3,    // yellow light mode
-} MuVsCameraWhiteBalance;
+} muVsCameraWhiteBalance;
 typedef enum {
   kLevelDefault         = 0,
   kLevelSpeed           = 1,      // speed first mode
   kLevelBalance         = 2,      // balance mode
   kLevelAccuracy        = 3,      // accuracy first mode
-} MuVsVisionLevel;
+} muVsVisionLevel;
 
 // register type
 typedef union {
@@ -188,60 +184,60 @@ typedef union {
 } MuVsSensorConfig1;
 typedef union {
   struct {
-    MuVsBaudrate baudrate :3;
+    muVsBaudrate baudrate :3;
   };
   unsigned char uart_reg_value;
 } MuVsUartConfig;
 typedef union {
   struct {
     unsigned char manual:1;
-    MuVsLedColor detected_color:3;
+    MuVsLedColor detectedColor:3;
     unsigned char hold:1;
-    MuVsLedColor undetected_color:3;
+    MuVsLedColor undetectedColor:3;
   };
   unsigned char led_reg_value;
 } MuVsLedConfig;
 typedef union {
   struct {
-    MuVsCameraZoom zoom:3;
+    muVsCameraZoom zoom:3;
     unsigned char rotate:1;
-    MuVsCameraFPS fps:1;
-    MuVsCameraWhiteBalance white_balance:2;
+    muVsCameraFPS fps:1;
+    muVsCameraWhiteBalance white_balance:2;
     unsigned char calibration:1;
   };
-  unsigned char camera_reg_value;
-} MuVsCameraConfig1;
+  unsigned char cameraRegValue;
+} MuVsCameraConfig;
 typedef union {
   struct {
     unsigned char status :1;
     unsigned char default_setting :1;  // set 1 to reset vision configuration
-    MuVsStreamOutputMode output_mode :2;
-    MuVsVisionLevel level :2;
+    muVsStreamOutputMode output_mode :2;
+    muVsVisionLevel level :2;
     unsigned char reserve6 :1;
     unsigned char output_enable :1;
   };
   unsigned char vision_config_reg_value;
-} MuVsVisionConfig1;
+} MuVsVisionConfig;
 typedef struct {
   unsigned char frame;
   unsigned char detect;
   struct {
     union {
       unsigned char result_data1;
-      unsigned char x_value;
-      unsigned char color_r_value;
+      unsigned char xValue;
+      unsigned char colorRValue;
       unsigned char top_x_value;
     };
     union {
       unsigned char result_data2;
-      unsigned char y_value;
-      unsigned char color_g_value;
+      unsigned char yValue;
+      unsigned char colorGValue;
       unsigned char top_y_value;
     };
     union {
       unsigned char result_data3;
       unsigned char width;
-      unsigned char color_b_value;
+      unsigned char colorBValue;
       unsigned char bot_x_value;
     };
     union {
@@ -254,8 +250,8 @@ typedef struct {
       unsigned char color;
       unsigned char lable;
     };
-  } vision_result[MU_MAX_RESULT];
-} MuVsVisionState;
+  } visionResult[MU_MAX_RESULT];
+} muVsVisionState;
 
 #ifdef __cplusplus
  }

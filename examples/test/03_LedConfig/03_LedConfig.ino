@@ -1,11 +1,16 @@
-/*
- *  
- *  Author: pan
+/*!
+ * @file 03_LedConfig.ino
+ * @brief Examples of led config.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
  */
-
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "MuVisionSensor.h"
+#include "DFRobot_MuVisionSensor.h"
 #include <Wire.h>
 
 /*
@@ -104,7 +109,7 @@
 /*
  * Functions
  */
-MuVisionSensor MU(0x60); // Set address
+DFRobot_MuVisionSensor MU(0x60); // Set address
 
 #ifdef OUTPUT_MODE_UART
 SoftwareSerial SoftSerial(SOFT_SERIAL_RX_PIN, SOFT_SERIAL_TX_PIN);  // RX, TX  // The hardware serial port is used for log output, so we use soft serial port
@@ -125,21 +130,21 @@ void setup() {
   Serial.println("Finised");
 
   Serial.println("Led begin...");
-  MU.LedSetMode(kLed1, LED1_MANUAL_MODE, LED1_HOLD);
-  MU.LedSetMode(kLed2, LED2_MANUAL_MODE, LED2_HOLD);
+  MU.ledSetMode(kLed1, LED1_MANUAL_MODE, LED1_HOLD);
+  MU.ledSetMode(kLed2, LED2_MANUAL_MODE, LED2_HOLD);
   
-  MU.LedSetColor(kLed1, LED1_DETECTED_COLOR, LED1_UNDETECTED_COLOR, LED1_LEVEL);
-  MU.LedSetColor(kLed2, LED2_DETECTED_COLOR, LED2_UNDETECTED_COLOR, LED2_LEVEL);
+  MU.ledSetColor(kLed1, LED1_DETECTED_COLOR, LED1_UNDETECTED_COLOR, LED1_LEVEL);
+  MU.ledSetColor(kLed2, LED2_DETECTED_COLOR, LED2_UNDETECTED_COLOR, LED2_LEVEL);
   Serial.println("Finished");
    
   Serial.println("Vision begin...");
-  MU.VisionBegin(VISION_TYPE);
+  MU.visionBegin(VISION_TYPE);
   Serial.println("Finished");
   Serial.println("MU Vision Sensor Processing...");
 }
 
 void loop() {
-  if (MU.GetValue(VISION_TYPE, kStatus)) {
+  if (MU.getValue(VISION_TYPE, kStatus)) {
     Serial.println("detect");
   } else {
     Serial.println("undetect");

@@ -1,5 +1,15 @@
+/*!
+ * @file numberCard.ino
+ * @brief Examples of identifying number card.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #include <Arduino.h>
-#include <MuVisionSensor.h>
+#include <DFRobot_MuVisionSensor.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 
@@ -22,7 +32,7 @@
 #define RX_PIN 3
 SoftwareSerial mySerial(RX_PIN, TX_PIN);
 #endif
-MuVisionSensor Mu(MU_ADDRESS);
+DFRobot_MuVisionSensor Mu(MU_ADDRESS);
 
 void setup() {
   // put your setup code here, to run once:
@@ -48,31 +58,31 @@ void setup() {
     } while (1);
   }
   // enable vision: number card
-  Mu.VisionBegin(VISION_NUM_CARD_DETECT);
+  Mu.visionBegin(VISION_NUM_CARD_DETECT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long time_start = millis();
+  long timeStart = millis();
 
   // read result
-  if (Mu.GetValue(VISION_NUM_CARD_DETECT, kStatus)) {                   // update vision result and get status, 0: undetected, other: detected
+  if (Mu.getValue(VISION_NUM_CARD_DETECT, kStatus)) {                   // update vision result and get status, 0: undetected, other: detected
     Serial.println("vision number card detected:");
     Serial.print("x = ");
-    Serial.println(Mu.GetValue(VISION_NUM_CARD_DETECT, kXValue));       // get vision result: x axes value
+    Serial.println(Mu.getValue(VISION_NUM_CARD_DETECT, kXValue));       // get vision result: x axes value
     Serial.print("y = ");
-    Serial.println(Mu.GetValue(VISION_NUM_CARD_DETECT, kYValue));       // get vision result: y axes value
+    Serial.println(Mu.getValue(VISION_NUM_CARD_DETECT, kYValue));       // get vision result: y axes value
     Serial.print("width = ");
-    Serial.println(Mu.GetValue(VISION_NUM_CARD_DETECT, kWidthValue));   // get vision result: width value
+    Serial.println(Mu.getValue(VISION_NUM_CARD_DETECT, kWidthValue));   // get vision result: width value
     Serial.print("height = ");
-    Serial.println(Mu.GetValue(VISION_NUM_CARD_DETECT, kHeightValue));  // get vision result: height value
+    Serial.println(Mu.getValue(VISION_NUM_CARD_DETECT, kHeightValue));  // get vision result: height value
     Serial.print("label = ");
-    Serial.println(Mu.GetValue(VISION_NUM_CARD_DETECT, kLabel));        // get vision result: label value
+    Serial.println(Mu.getValue(VISION_NUM_CARD_DETECT, kLabel));        // get vision result: label value
   } else {
     Serial.println("vision number card undetected.");
   }
   Serial.print("fps = ");
-  Serial.println(1000/(millis()-time_start));
+  Serial.println(1000/(millis()-timeStart));
   Serial.println();
 }
 

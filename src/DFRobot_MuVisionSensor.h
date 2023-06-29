@@ -1,42 +1,38 @@
-// Copyright 2018 Morpx Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/*!
+ * @file DFRobot_MuVisionSensor.h
+ * @brief Basic struct of DFRobot_MuVisionSensor class.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #ifndef MUVISIONSENSOR_SRC_MUVISIONSENSOR_H_
 #define MUVISIONSENSOR_SRC_MUVISIONSENSOR_H_
 
-#include "mu_vision_sensor_interface.h"
-#include "mu_vision_sensor_uart_hw_interface.h"
-#include "mu_vision_sensor_i2c_hw_interface.h"
+#include "muVisionSensorInterface.h"
+#include "muVisionSensorUartHwInterface.h"
+#include "muVisionSensorI2cHwInterface.h"
 
 /*
- * MuVisionType
+ * muVisionType
  * Bit: |          3         |          2         |            1             |           0         |
  *      | VISION_LINE_DETECT | VISION_BALL_DETECT | VISION_COLOR_RECOGNITION | VISION_COLOR_DETECT |
  *      |           7            |             6              |             5            |          4         |
  *      | VISION_NUM_CARD_DETECT | VISION_TRAFFIC_CARD_DETECT | VISION_SHAPE_CARD_DETECT | VISION_BODY_DETECT |
  */
-typedef unsigned short MuVisionType;
+typedef unsigned short muVisionType;
 
-// MuVisionType: Vision Type User Input
-#define VISION_COLOR_DETECT           (MuVisionType)visionTypeEnumToMacro(kVisionColorDetect)
-#define VISION_COLOR_RECOGNITION      (MuVisionType)visionTypeEnumToMacro(kVisionColorRecog)
-#define VISION_BALL_DETECT            (MuVisionType)visionTypeEnumToMacro(kVisionBall)
-#define VISION_BODY_DETECT            (MuVisionType)visionTypeEnumToMacro(kVisionBody)
-#define VISION_SHAPE_CARD_DETECT      (MuVisionType)visionTypeEnumToMacro(kVisionShapeCard)
-#define VISION_TRAFFIC_CARD_DETECT    (MuVisionType)visionTypeEnumToMacro(kVisionTrafficCard)
-#define VISION_NUM_CARD_DETECT        (MuVisionType)visionTypeEnumToMacro(kVisionNumberCard)
-#define VISION_ALL                    (MuVisionType)(visionTypeEnumToMacro(kVisionMaxType)-1)
+// muVisionType: Vision Type User Input
+#define VISION_COLOR_DETECT           (muVisionType)visionTypeEnumToMacro(kVisionColorDetect)
+#define VISION_COLOR_RECOGNITION      (muVisionType)visionTypeEnumToMacro(kVisionColorRecog)
+#define VISION_BALL_DETECT            (muVisionType)visionTypeEnumToMacro(kVisionBall)
+#define VISION_BODY_DETECT            (muVisionType)visionTypeEnumToMacro(kVisionBody)
+#define VISION_SHAPE_CARD_DETECT      (muVisionType)visionTypeEnumToMacro(kVisionShapeCard)
+#define VISION_TRAFFIC_CARD_DETECT    (muVisionType)visionTypeEnumToMacro(kVisionTrafficCard)
+#define VISION_NUM_CARD_DETECT        (muVisionType)visionTypeEnumToMacro(kVisionNumberCard)
+#define VISION_ALL                    (muVisionType)(visionTypeEnumToMacro(kVisionMaxType)-1)
 
 // Card Type
 // Vision Shape Card
@@ -66,126 +62,126 @@ typedef unsigned short MuVisionType;
 #define MU_BALL_TENNIS                0x02U
 
 
-class MuVisionSensor {
+class DFRobot_MuVisionSensor {
  public:
   /**
     * @brief  construct class MU vision sensor.
     * @param  address: MU vision sensor device address.
     * @retval none
     */
-  MuVisionSensor(uint32_t address = 0x60);
-  virtual ~MuVisionSensor();
+  DFRobot_MuVisionSensor(uint32_t address = 0x60);
+  virtual ~DFRobot_MuVisionSensor();
 
   /**
-    * @ TODO WARNING this function may delete in later version, please use `begin(communication_port)` instead.
+    * @ TODO WARNING this function may delete in later version, please use `begin(communicationPort)` instead.
     * @brief  MU vision sensor begin.
-    * @param  communication_port: MuVsI2C(i2c) or MuVsUart(uart).
+    * @param  communicationPort: MuVsI2C(i2c) or MuVsUart(uart).
     * @param  mode: kSerialMode
     *               kI2CMode
     * @retval MU_OK: begin success.
     *         other: protocol assert fail.
     */
-  uint8_t __attribute__ ((deprecated("\n***WARNING*** function `begin(communication_port, mode)` has been deprecated, and may delete in later version, please use `begin(communication_port)` instead.")))
-          begin(void* communication_port,
-                MuVsMode mode);
+  uint8_t __attribute__ ((deprecated("\n***WARNING*** function `begin(communicationPort, mode)` has been deprecated, and may delete in later version, please use `begin(communicationPort)` instead.")))
+          begin(void* communicationPort,
+                muVsMode mode);
   /**
     * @brief  MU vision sensor begin.
-    * @param  communication_port: MuVsUart(uart).
+    * @param  communicationPort: MuVsUart(uart).
     * @retval MU_OK: begin success.
     *         other: protocol assert fail.
     */
-  uint8_t begin(MuVsUart* communication_port);
+  uint8_t begin(MuVsUart* communicationPort);
   /**
     * @brief  MU vision sensor begin.
-    * @param  communication_port: MuVsI2C(i2c).
+    * @param  communicationPort: MuVsI2C(i2c).
     * @retval MU_OK: begin success.
     *         other: protocol assert fail.
     */
-  uint8_t begin(MuVsI2C* communication_port);
+  uint8_t begin(MuVsI2C* communicationPort);
 
   // Based interface
   /**
     * @brief  begin vision.
-    * @param  vision_type: vision type.
+    * @param  visionType: vision type.
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionBegin(MuVisionType);
+  uint8_t visionBegin(muVisionType);
   /**
     * @brief  end vision.
-    * @param  vision_type: vision type.
+    * @param  visionType: vision type.
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionEnd(MuVisionType);
+  uint8_t visionEnd(muVisionType);
   /**
     * @brief  get vision result data, this function will update vision
     *         result automatically.
-    * @param  vision_type: vision type.
-    * @param  object_inf:  object information
+    * @param  visionType: vision type.
+    * @param  objectInf:  object information
     * @retval information value
     */
-  int GetValue(MuVisionType vision_type,
-               MuVsObjectInf object_inf);
+  int getValue(muVisionType visionType,
+               MuVsObjectInf objectInf);
   /**
     * @brief  write vision parameter.
-    * @param  vision_type: vision type.
-    * @param  object_inf:  object information
+    * @param  visionType: vision type.
+    * @param  objectInf:  object information
     * @param  value:  value
     * @retval MU_OK:  success
     *         other:  error
     */
-  int SetValue(MuVisionType vision_type,
-               MuVsObjectInf object_inf,
+  int setValue(muVisionType visionType,
+               MuVsObjectInf objectInf,
                uint8_t value) {
-    return write(vision_type, object_inf, value);
+    return write(visionType, objectInf, value);
   }
   /**
     * @brief  get vision result buffer pointer.
     *         this function WILL NOT update vision result, please use
-    *         function `UpdateResult([vision_type])` or
-    *         `GetValue([vision_type], kStatus)` to update vision result before this function
-    * @param  vision_type: vision type.
+    *         function `updateResult([visionType])` or
+    *         `getValue([visionType], kStatus)` to update vision result before this function
+    * @param  visionType: vision type.
     * @retval vision result buffer pointer,
     *         return `nullptr` if the vision type is not `begin` or not supported
     */
-  MuVsVisionState* GetVisionState(MuVisionType vision_type);
+  muVsVisionState* getVisionState(muVisionType visionType);
 
   // Advance interface
   /**
     * @brief  update result data from vision sensor, must used after
-    *         VisionBegin or VisionSetStatus.
-    * @param  vision_type: vision type.
-    * @param  wait_all_result:  true: return if get all input vision type
+    *         visionBegin or visionSetStatus.
+    * @param  visionType: vision type.
+    * @param  waitAllResult:  true: return if get all input vision type
     *                           false: return if get one of the input vision type
     * @retval the vision type which have been updated
     */
-  MuVisionType UpdateResult(MuVisionType vision_type,
-                            bool wait_all_result = true);
+  muVisionType updateResult(muVisionType visionType,
+                            bool waitAllResult = true);
   /**
     * @brief  write vision parameter.
-    * @param  vision_type: vision type.
-    * @param  object_inf:  object information
+    * @param  visionType: vision type.
+    * @param  objectInf:  object information
     * @param  value:  value
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t write(MuVisionType, MuVsObjectInf, uint8_t value);
+  uint8_t write(muVisionType, MuVsObjectInf, uint8_t value);
   /**
     * @brief  read result data.
-    * @param  vision_type: vision type.
-    * @param  object_inf:  object information
+    * @param  visionType: vision type.
+    * @param  objectInf:  object information
     * @retval information value
     */
-  uint8_t read(MuVisionType vision_type,
-               MuVsObjectInf object_inf,
-               uint8_t result_num = 1);
+  uint8_t read(muVisionType visionType,
+               MuVsObjectInf objectInf,
+               uint8_t resultNum = 1);
 
   // Sensor functions
   // @brief  restart MU vision sensor
-  uint8_t SensorSetRestart(void);
+  uint8_t sensorSetRestart(void);
   // @brief  set all register to default value(include baud rate)
-  uint8_t SensorSetDefault(void);
+  uint8_t sensorSetDefault(void);
 
   // LED functions
   /**
@@ -196,19 +192,19 @@ class MuVisionSensor {
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t LedSetMode(MuVsLed led, bool manual, bool hold);
+  uint8_t ledSetMode(MuVsLed led, bool manual, bool hold);
   /**
     * @brief  set led color.
     * @param  led: led type.
-    * @param  detected_color: led color while sensor detected target.
-    * @param  undetected_color: led color while sensor undetected target.
+    * @param  detectedColor: led color while sensor detected target.
+    * @param  undetectedColor: led color while sensor undetected target.
     * @param  level:  led brightness, form 0(close) to 15
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t LedSetColor(MuVsLed led,
-                      MuVsLedColor detected_color,
-                      MuVsLedColor undetected_color,
+  uint8_t ledSetColor(MuVsLed led,
+                      MuVsLedColor detectedColor,
+                      MuVsLedColor undetectedColor,
                       uint8_t level = 1);
 
   // Camera functions
@@ -218,7 +214,7 @@ class MuVisionSensor {
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t CameraSetZoom(MuVsCameraZoom);
+  uint8_t cameraSetZoom(muVsCameraZoom);
   /**
     * @brief  rotate camera.
     * @param  enable: true: rotate camera.
@@ -226,41 +222,41 @@ class MuVisionSensor {
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t CameraSetRotate(bool enable);
+  uint8_t cameraSetRotate(bool enable);
   /**
     * @brief  set camera zoom.
     * @param  camera FPS type.
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t CameraSetFPS(MuVsCameraFPS);
+  uint8_t cameraSetFPS(muVsCameraFPS);
   /**
     * @brief  set camera white balance.
     * @param  camera white balance type.
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t CameraSetAwb(MuVsCameraWhiteBalance);
+  uint8_t cameraSetAwb(muVsCameraWhiteBalance);
   /**
     * @brief  get camera zoom value.
     * @retval camera zoom value
     */
-  MuVsCameraZoom CameraGetZoom(void);
+  muVsCameraZoom cameraGetZoom(void);
   /**
     * @brief  get camera AWB type.
     * @retval camera AWB type
     */
-  MuVsCameraWhiteBalance CameraGetAwb(void);
+  muVsCameraWhiteBalance cameraGetAwb(void);
   /**
     * @brief  get camera rotate state.
     * @retval camera rotate state
     */
-  bool CameraGetRotate(void);
+  bool cameraGetRotate(void);
   /**
     * @brief  get camera FPS type.
     * @retval camera FPS type
     */
-  MuVsCameraFPS CameraGetFPS(void);
+  muVsCameraFPS cameraGetFPS(void);
 
   // Uart functions
   /**
@@ -269,82 +265,82 @@ class MuVisionSensor {
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t UartSetBaudrate(MuVsBaudrate);
+  uint8_t uartSetBaudrate(muVsBaudrate baud);
 
   // Vision functions
   /**
     * @brief  set vision status.
-    * @param  vision_type: vision type
+    * @param  visionType: vision type
     * @param  enable: true: enable vision
     *                 false: disable vision
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionSetStatus(MuVisionType vision_type, bool enable);
+  uint8_t visionSetStatus(muVisionType visionType, bool enable);
   /**
     * @brief  set vision status.
-    * @param  vision_type: vision type
+    * @param  visionType: vision type
     * @param  mode: output mode
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionSetOutputMode(MuVsStreamOutputMode mode);
+  uint8_t visionSetOutputMode(muVsStreamOutputMode mode);
   /**
     * @brief  output enable.
-    * @param  vision_type: vision type
+    * @param  visionType: vision type
     * @param  status: true: start output
     *                 false: stop output
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionSetOutputEnable(MuVisionType vision_type, bool status);
+  uint8_t visionSetOutputEnable(muVisionType visionType, bool status);
   /**
     * @brief  set vision configure to default value.
-    * @param  vision_type: vision type
+    * @param  visionType: vision type
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionSetDefault(MuVisionType vision_type);
+  uint8_t visionSetDefault(muVisionType visionType);
   /**
     * @brief  set vision level.
-    * @param  vision_type: vision type
+    * @param  visionType: vision type
     * @param  level: vision level
     * @retval MU_OK:  success
     *         other:  error
     */
-  uint8_t VisionSetLevel(MuVisionType vision_type,
-                         MuVsVisionLevel level);
+  uint8_t visionSetLevel(muVisionType visionType,
+                         muVsVisionLevel level);
   /**
     * @brief  get vision status.
     * @retval vision status
     */
-  bool VisionGetStatus(MuVisionType vision_type);
+  bool visionGetStatus(muVisionType visionType);
   /**
     * @brief  get vision level.
     * @retval vision level
     */
-  MuVsVisionLevel VisionGetLevel(MuVisionType vision_type);
+  muVsVisionLevel visionGetLevel(muVisionType visionType);
   /**
     * @brief  get vision output mode.
     * @retval vision output mode
     */
-  MuVsStreamOutputMode VisionGetOutputMode(void);
+  muVsStreamOutputMode visionGetOutputMode(void);
 
 
-  MuVisionSensor(const MuVisionSensor&) = delete;
-  MuVisionSensor& operator=(const MuVisionSensor &) = delete;
+  DFRobot_MuVisionSensor(const DFRobot_MuVisionSensor&) = delete;
+  DFRobot_MuVisionSensor& operator=(const DFRobot_MuVisionSensor &) = delete;
 
  private:
-  uint8_t SensorLockReg(bool lock);
-  MuVisionType UartUpdateResult(MuVisionType vision_type, bool wait_all_result);
-  bool malloc_vision_buffer(MuVsMessageVisionType);
-  bool free_vision_buffer(MuVsMessageVisionType);
+  uint8_t sensorLockReg(bool lock);
+  muVisionType uartUpdateResult(muVisionType visionType, bool waitAllResult);
+  bool mallocVisionBuffer(muVsMessageVisionType);
+  bool freeVisionBuffer(muVsMessageVisionType);
 
-  uint8_t address_ = 0;
-  MuVsMode mode_ = kSerialMode;
-  MuVsMethod* mu_vs_method = nullptr;
-  MuVsStreamOutputMode output_mode_ = kCallBackMode;
-  MuVsVisionState *vision_state_[kVisionMaxType-1] = {nullptr};
+  uint8_t _address = 0;
+  muVsMode _mode = kSerialMode;
+  muVsMethod* _muVsMethod = nullptr;
+  muVsStreamOutputMode _outputMode = kCallBackMode;
+  muVsVisionState *_visionState[kVisionMaxType-1] = {nullptr};
 };
 
 

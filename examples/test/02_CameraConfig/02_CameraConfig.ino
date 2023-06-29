@@ -1,6 +1,16 @@
+/*!
+ * @file 02_CameraConfig.ino
+ * @brief Examples of camera config.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "MuVisionSensor.h"
+#include "DFRobot_MuVisionSensor.h"
 #include <Wire.h>
 
 /*
@@ -73,7 +83,7 @@
 /*
  * Functions
  */
-MuVisionSensor MU(0x60); // 0x60 is device address
+DFRobot_MuVisionSensor MU(0x60); // 0x60 is device address
 
 #ifdef OUTPUT_MODE_UART
 SoftwareSerial SoftSerial(SOFT_SERIAL_RX_PIN, SOFT_SERIAL_TX_PIN);  // RX, TX  // The hardware serial port is used for log output, so we use soft serial port
@@ -94,45 +104,45 @@ void setup() {
   Serial.println("MU begin finised");
 
 #ifdef AWB_TEST
-  MU.CameraSetAwb(AWB_MODE);
+  MU.cameraSetAwb(AWB_MODE);
 #endif
 
 #ifdef FPS_TEST
-  MU.CameraSetFPS(FPS_VALUE);
+  MU.cameraSetFPS(FPS_VALUE);
 #endif
 
 #ifdef ZOOM_TEST
-  MU.CameraSetZoom(ZOOM_VALUE);    //zoom值设置
+  MU.cameraSetZoom(ZOOM_VALUE);    //zoom值设置
 #endif
 
 #ifdef ROTATE_TEST
-  MU.CameraSetRotate(ROATAE_FLAG);
+  MU.cameraSetRotate(ROATAE_FLAG);
 #endif
 
   Serial.println("Vision begin...");
-  MU.VisionBegin(VISION_TYPE);
+  MU.visionBegin(VISION_TYPE);
   Serial.println("Finished");
   Serial.println("MU Vision Sensor Processing...");
 }
 
 void loop() {
-  if (MU.GetValue(VISION_TYPE, kStatus)) {
+  if (MU.getValue(VISION_TYPE, kStatus)) {
     Serial.print("detected");
     if (VISION_TYPE != VISION_COLOR_RECOGNITION) {
       Serial.print("  label:");
-      Serial.print(MU.GetValue(VISION_TYPE, kLabel));
+      Serial.print(MU.getValue(VISION_TYPE, kLabel));
       Serial.print("  x:");
-      Serial.print(MU.GetValue(VISION_TYPE, kXValue));
+      Serial.print(MU.getValue(VISION_TYPE, kXValue));
       Serial.print("  y:");
-      Serial.print(MU.GetValue(VISION_TYPE, kYValue));
+      Serial.print(MU.getValue(VISION_TYPE, kYValue));
       Serial.print("  width:");
-      Serial.print(MU.GetValue(VISION_TYPE, kWidthValue));
+      Serial.print(MU.getValue(VISION_TYPE, kWidthValue));
       Serial.print("  height:");
-      Serial.print(MU.GetValue(VISION_TYPE, kHeightValue));
+      Serial.print(MU.getValue(VISION_TYPE, kHeightValue));
       Serial.println("");
     } else {
       Serial.print("  label:");
-      PrintColorLabel(MU.GetValue(VISION_TYPE, kLabel));
+      PrintColorLabel(MU.getValue(VISION_TYPE, kLabel));
       Serial.println("");
     }
   } else {

@@ -1,3 +1,13 @@
+/*!
+ * @file colorRecognition.ino
+ * @brief Examples of color recognition.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #include <Wire.h>
 
 #define MU_ADDRESS    0x60
@@ -32,7 +42,7 @@
 #define MU_COLOR_BLUE                 0x07U
 #define MU_COLOR_PURPLE               0x08U
 
-int i2c_read8(uint8_t reg) {
+int i2cRead8(uint8_t reg) {
   Wire.beginTransmission(MU_ADDRESS);
   Wire.write(reg);
   Wire.endTransmission();
@@ -40,7 +50,7 @@ int i2c_read8(uint8_t reg) {
   Wire.requestFrom(MU_ADDRESS, 1);
   return Wire.read();
 }
-void i2c_write8(const uint8_t reg, const uint8_t value) {
+void i2cWrite8(const uint8_t reg, const uint8_t value) {
   Wire.beginTransmission(MU_ADDRESS);
   Wire.write(reg);
   Wire.write(value);
@@ -59,7 +69,7 @@ uint8_t reg[][2] = {
 //    { REG_PARAM_VALUE4,   5 }, // height
     { REG_VISION_CONF1,   0x21 }, // vision begin
 };
-uint8_t frame_count_last = 0;
+uint8_t frameCountLast = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -67,39 +77,39 @@ void setup() {
   Wire.begin();
   delay(500);
 
-  if (i2c_read8(REG_PROTOCOL_VER) == PROTOCOL_VER) {
+  if (i2cRead8(REG_PROTOCOL_VER) == PROTOCOL_VER) {
     Serial.println("device initialized.");
   } else {
     Serial.println("fail to initialize device! Please check protocol version.");
   }
   for (uint32_t i = 0; i < sizeof(reg)/2; ++i) {
-    i2c_write8(reg[i][0], reg[i][1]);
+    i2cWrite8(reg[i][0], reg[i][1]);
   }
   delay(1000); // waiting for AWB lock.
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long time_start = millis();
-  int frame_count = 0;
+  long timeStart = millis();
+  int frameCount = 0;
   // waiting for update
   do {
-    frame_count = i2c_read8(REG_FRAME_CNT);
-  } while(frame_count == frame_count_last);
-  frame_count_last = frame_count;
+    frameCount = i2cRead8(REG_FRAME_CNT);
+  } while(frameCount == frameCountLast);
+  frameCountLast = frameCount;
 
-  i2c_write8(REG_VISION_ID, VISION_ID);
+  i2cWrite8(REG_VISION_ID, VISION_ID);
   // read result
-  if (i2c_read8(RESULT_NUM) > 0) {
+  if (i2cRead8(RESULT_NUM) > 0) {
     Serial.println("color detected:");
     Serial.print("color = (");
-    Serial.print(i2c_read8(RESULT_DATA1));
+    Serial.print(i2cRead8(RESULT_DATA1));
     Serial.print(",");
-    Serial.print(i2c_read8(RESULT_DATA2));
+    Serial.print(i2cRead8(RESULT_DATA2));
     Serial.print(",");
-    Serial.print(i2c_read8(RESULT_DATA3));
+    Serial.print(i2cRead8(RESULT_DATA3));
     Serial.print(")\nlabel = ");
-    switch (i2c_read8(RESULT_DATA5)) {
+    switch (i2cRead8(RESULT_DATA5)) {
       case 0:
         Serial.println("unknow color");
         break;
@@ -134,6 +144,6 @@ void loop() {
     Serial.println("color undetected.");
   }
   Serial.print("fps = ");
-  Serial.println(1000/(millis()-time_start));
+  Serial.println(1000/(millis()-timeStart));
   Serial.println();
 }

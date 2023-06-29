@@ -1,5 +1,15 @@
+/*!
+ * @file colorRecognition.ino
+ * @brief Examples of recognition color.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #include <Arduino.h>
-#include <MuVisionSensor.h>
+#include <DFRobot_MuVisionSensor.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 
@@ -22,7 +32,7 @@
 #define RX_PIN 3
 SoftwareSerial mySerial(RX_PIN, TX_PIN);
 #endif
-MuVisionSensor Mu(MU_ADDRESS);
+DFRobot_MuVisionSensor Mu(MU_ADDRESS);
 
 void setup() {
   // put your setup code here, to run once:
@@ -48,23 +58,23 @@ void setup() {
     } while (1);
   }
   // enable vision: number card
-  Mu.VisionBegin(VISION_COLOR_RECOGNITION);
+  Mu.visionBegin(VISION_COLOR_RECOGNITION);
   Mu.write(VISION_COLOR_RECOGNITION, kXValue, 50);                  // set detect region center x value(0~100)
   Mu.write(VISION_COLOR_RECOGNITION, kYValue, 50);                  // set detect region center y value(0~100)
   Mu.write(VISION_COLOR_RECOGNITION, kWidthValue, 5);               // set detect region center width value(0~100)
   Mu.write(VISION_COLOR_RECOGNITION, kHeightValue, 5);              // set detect region center height value(0~100)
-  Mu.CameraSetAwb(kLockWhiteBalance);                               // lock AWB
+  Mu.cameraSetAwb(kLockWhiteBalance);                               // lock AWB
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long time_start = millis();
+  long timeStart = millis();
 
   // read result
-  if (Mu.GetValue(VISION_COLOR_RECOGNITION, kStatus)) {                    // update vision result and get status, 0: undetected, other: detected
+  if (Mu.getValue(VISION_COLOR_RECOGNITION, kStatus)) {                    // update vision result and get status, 0: undetected, other: detected
     Serial.println("vision color detected:");
     Serial.print("label = ");
-    switch(Mu.GetValue(VISION_COLOR_RECOGNITION, kLabel)) {                // get vision result: label value
+    switch(Mu.getValue(VISION_COLOR_RECOGNITION, kLabel)) {                // get vision result: label value
       case MU_COLOR_BLACK:
         Serial.println("black");
         break;
@@ -91,20 +101,20 @@ void loop() {
         break;
       default:
         Serial.print("unknow color type: ");
-        Serial.println(Mu.GetValue(VISION_COLOR_RECOGNITION, kLabel));
+        Serial.println(Mu.getValue(VISION_COLOR_RECOGNITION, kLabel));
         break;
     }
     Serial.print("r = ");
-    Serial.println(Mu.GetValue(VISION_COLOR_RECOGNITION, kRValue));        // get vision result: x axes value
+    Serial.println(Mu.getValue(VISION_COLOR_RECOGNITION, kRValue));        // get vision result: x axes value
     Serial.print("g = ");
-    Serial.println(Mu.GetValue(VISION_COLOR_RECOGNITION, kGValue));        // get vision result: y axes value
+    Serial.println(Mu.getValue(VISION_COLOR_RECOGNITION, kGValue));        // get vision result: y axes value
     Serial.print("b = ");
-    Serial.println(Mu.GetValue(VISION_COLOR_RECOGNITION, kBValue));    // get vision result: width value
+    Serial.println(Mu.getValue(VISION_COLOR_RECOGNITION, kBValue));    // get vision result: width value
   } else {
     Serial.println("vision color undetected.");
   }
   Serial.print("fps = ");
-  Serial.println(1000/(millis()-time_start));
+  Serial.println(1000/(millis()-timeStart));
   Serial.println();
 }
 

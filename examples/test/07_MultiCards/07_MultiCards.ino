@@ -1,10 +1,16 @@
-/*
- *
+/*!
+ * @file 07_MultiCards.ino
+ * @brief Examples of multi cards.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
  */
-
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "MuVisionSensor.h"
+#include "DFRobot_MuVisionSensor.h"
 #include <Wire.h>
 
 /*
@@ -36,7 +42,7 @@
 /*
  * Functions
  */
-MuVisionSensor MU(0x60); // 0x60 is device address
+DFRobot_MuVisionSensor MU(0x60); // 0x60 is device address
 
 #ifdef OUTPUT_MODE_UART
 SoftwareSerial SoftSerial(SOFT_SERIAL_RX_PIN, SOFT_SERIAL_TX_PIN);  // RX, TX  // The hardware serial port is used for log output, so we use soft serial port
@@ -57,44 +63,44 @@ void setup() {
   Serial.println("Finised");
 
   Serial.println("Vision begin...");
-  MU.VisionBegin(VISION_TYPE);
+  MU.visionBegin(VISION_TYPE);
 #ifdef VISION_LEVEL
-  MU.VisionSetLevel(VISION_TYPE, VISION_LEVEL);
+  MU.visionSetLevel(VISION_TYPE, VISION_LEVEL);
 #endif
   Serial.println("Finished");
   Serial.println("MU Vision Sensor Processing...");
 }
   
 void loop() {
-  MuVsVisionState *vision_state;
-  MuVisionType vision_type;
+  muVsVisionState *visionState;
+  muVisionType visionType;
   
   while (1) {
-    vision_type = MU.UpdateResult(VISION_TYPE, false); // Update detection results
+    visionType = MU.updateResult(VISION_TYPE, false); // Update detection results
   
-    if (vision_type & VISION_TYPE) {
-     vision_state = MU.GetVisionState(VISION_TYPE);
+    if (visionType & VISION_TYPE) {
+     visionState = MU.getVisionState(VISION_TYPE);
       Serial.print("=====frame:");
-      Serial.print(vision_state->frame);
+      Serial.print(visionState->frame);
       Serial.println("=====");
       
       Serial.print("shape card : ");
-      if (MU.GetValue(VISION_SHAPE_CARD_DETECT, kStatus)) {
-        PrintShapeCardLabel(MU.GetValue(VISION_SHAPE_CARD_DETECT, kLabel));
+      if (MU.getValue(VISION_SHAPE_CARD_DETECT, kStatus)) {
+        PrintShapeCardLabel(MU.getValue(VISION_SHAPE_CARD_DETECT, kLabel));
       } else {
         Serial.println("undetected");
       }
   
       Serial.print("traffic card : ");
-      if (MU.GetValue(VISION_TRAFFIC_CARD_DETECT, kStatus)) {
-        PrintTrafficCardLabel(MU.GetValue(VISION_TRAFFIC_CARD_DETECT, kLabel));
+      if (MU.getValue(VISION_TRAFFIC_CARD_DETECT, kStatus)) {
+        PrintTrafficCardLabel(MU.getValue(VISION_TRAFFIC_CARD_DETECT, kLabel));
       } else {
         Serial.println("undetected");
       }
   
       Serial.print("number card : ");
-      if (MU.GetValue(VISION_NUM_CARD_DETECT, kStatus)) {
-        Serial.println(MU.GetValue(VISION_NUM_CARD_DETECT, kLabel));
+      if (MU.getValue(VISION_NUM_CARD_DETECT, kStatus)) {
+        Serial.println(MU.getValue(VISION_NUM_CARD_DETECT, kLabel));
       } else {
         Serial.println("undetected");
       }

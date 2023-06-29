@@ -1,4 +1,14 @@
-#include <MuVisionSensor.h>
+/*!
+ * @file getTargetPosition.ino
+ * @brief Examples of get target position.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
+#include <DFRobot_MuVisionSensor.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 
@@ -31,7 +41,7 @@
 #define RX_PIN 3
 SoftwareSerial mySerial(RX_PIN, TX_PIN);
 #endif
-MuVisionSensor Mu(MU_ADDRESS);
+DFRobot_MuVisionSensor Mu(MU_ADDRESS);
 
 void setup() {
   // put your setup code here, to run once:
@@ -46,11 +56,11 @@ void setup() {
   Mu.begin(&mySerial);          // initialized MU on soft serial port
 #endif
 
-  Mu.VisionBegin(VISION_TYPE);  // enable vision
+  Mu.visionBegin(VISION_TYPE);  // enable vision
 
   if (VISION_TYPE == VISION_COLOR_DETECT
       || VISION_TYPE == VISION_COLOR_RECOGNITION) {
-    Mu.CameraSetAwb(kLockWhiteBalance); // lock AWB
+    Mu.cameraSetAwb(kLockWhiteBalance); // lock AWB
     if (VISION_TYPE == VISION_COLOR_RECOGNITION) {
       Mu.write(VISION_TYPE, kXValue, 50);
       Mu.write(VISION_TYPE, kYValue, 50);
@@ -62,10 +72,10 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long time_start = millis();
+  long timeStart = millis();
 
   // read result
-  if (Mu.GetValue(VISION_TYPE, kStatus)) {
+  if (Mu.getValue(VISION_TYPE, kStatus)) {
     Serial.println("vision detected:");
     switch (VISION_TYPE) {
       case VISION_BALL_DETECT:
@@ -75,30 +85,30 @@ void loop() {
       case VISION_NUM_CARD_DETECT:
       case VISION_COLOR_DETECT:
         Serial.print("x = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kXValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kXValue));
         Serial.print("y = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kYValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kYValue));
         Serial.print("width = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kWidthValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kWidthValue));
         Serial.print("height = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kHeightValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kHeightValue));
         if (VISION_TYPE != VISION_COLOR_DETECT) {
           Serial.print("label = ");
-          Serial.println(Mu.GetValue(VISION_TYPE, kLabel));
+          Serial.println(Mu.getValue(VISION_TYPE, kLabel));
         } else {
           Serial.print("color = ");
-          Serial.println(Mu.GetValue(VISION_TYPE, kLabel));
+          Serial.println(Mu.getValue(VISION_TYPE, kLabel));
         }
         break;
       case VISION_COLOR_RECOGNITION:
         Serial.print("r = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kRValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kRValue));
         Serial.print("g = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kGValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kGValue));
         Serial.print("b = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kBValue));
+        Serial.println(Mu.getValue(VISION_TYPE, kBValue));
         Serial.print("color = ");
-        Serial.println(Mu.GetValue(VISION_TYPE, kLabel));
+        Serial.println(Mu.getValue(VISION_TYPE, kLabel));
         break;
       default:
         break;
@@ -107,7 +117,7 @@ void loop() {
     Serial.println("vision undetected.");
   }
   Serial.print("fps = ");
-  Serial.println(1000/(millis()-time_start));
+  Serial.println(1000/(millis()-timeStart));
   Serial.println();
 }
 

@@ -1,11 +1,14 @@
-/*
- * mu_vision_sensor_uart_hw_interface.cpp
- *
- *  Created on: 2018年8月8日
- *      Author: ysq
+/*!
+ * @file muVisionSensorUartHwInterface.cpp
+ * @brief Basic struct of uart HW interface class.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
  */
-
-#include "mu_vision_sensor_uart_hw_interface.h"
+#include "muVisionSensorUartHwInterface.h"
 #include <Arduino.h>
 
 MuVisionSensorUart::MuVisionSensorUart(MuVsUart* uart,

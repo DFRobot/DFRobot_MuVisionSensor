@@ -1,6 +1,16 @@
+/*!
+ * @file 01_VisionBasic.ino
+ * @brief Examples of vision settings.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT license (MIT)
+ * @author DFRobot
+ * @version  V1.0
+ * @date  2023-06-28
+ * @https://github.com/DFRobot/DFRobot_MuVisionSensor
+ */
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "MuVisionSensor.h"
+#include "DFRobot_MuVisionSensor.h"
 #include <Wire.h>
 
 /*
@@ -40,7 +50,7 @@
 /*
  * Functions
  */
-MuVisionSensor MU(0x60); // 0x60 is device address
+DFRobot_MuVisionSensor MU(0x60); // 0x60 is device address
 
 #ifdef OUTPUT_MODE_UART
 SoftwareSerial SoftSerial(SOFT_SERIAL_RX_PIN, SOFT_SERIAL_TX_PIN);  // RX, TX	// The hardware serial port is used for log output, so we use soft serial port
@@ -61,67 +71,67 @@ void setup() {
   Serial.println("Finised");
 
   Serial.println("Vision begin...");
-  MU.VisionBegin(VISION_TYPE);
+  MU.visionBegin(VISION_TYPE);
 #ifdef VISION_LEVEL
-  MU.VisionSetLevel(VISION_TYPE, VISION_LEVEL);
+  MU.visionSetLevel(VISION_TYPE, VISION_LEVEL);
 #endif
   Serial.println("Finished");
   Serial.println("MU Vision Sensor Processing...");
 }
   
 void loop() {
-  MuVsVisionState *vision_state;
-  MuVisionType vision_type;
+  muVsVisionState *visionState;
+  muVisionType visionType;
 
-  unsigned long frame_begin_time = 0;
-  unsigned long frame_process_time = 0;
-  unsigned long total_process_time = 0;
-  unsigned long detected_count = 0;
-  unsigned long total_process_count = 0;
+  unsigned long frameBeginTime = 0;
+  unsigned long frameProcessTime = 0;
+  unsigned long totalProcessTime = 0;
+  unsigned long detectedCount = 0;
+  unsigned long totalProcessCount = 0;
 
-  frame_begin_time = millis();
+  frameBeginTime = millis();
   
   while (1) {
-    vision_type = MU.UpdateResult(VISION_TYPE, false); // Update detection results
-    if (vision_type & VISION_TYPE) {
-      frame_process_time = millis() - frame_begin_time;
-      frame_begin_time = millis();
-      total_process_time += frame_process_time;
+    visionType = MU.updateResult(VISION_TYPE, false); // Update detection results
+    if (visionType & VISION_TYPE) {
+      frameProcessTime = millis() - frameBeginTime;
+      frameBeginTime = millis();
+      totalProcessTime += frameProcessTime;
       
-      vision_state = MU.GetVisionState(VISION_TYPE);
+      visionState = MU.getVisionState(VISION_TYPE);
 
       Serial.print("frame:");
-      Serial.print(vision_state->frame);
-      total_process_count++;
+      Serial.print(visionState->frame);
+      totalProcessCount++;
       Serial.print("  || rate:");
-      Serial.print((float)detected_count / (float)total_process_count * 100);
+      Serial.print((float)detectedCount / (float)totalProcessCount * 100);
       Serial.print("%");
       Serial.print("  time:");
-      Serial.print(frame_process_time);
+      Serial.print(frameProcessTime);
       Serial.print("ms");
       Serial.print("  fps:");
-      Serial.print(1000 / (total_process_time / total_process_count));      
-      if (vision_state->detect) {
-        detected_count++;
+      Serial.print(1000 / (totalProcessTime / totalProcessCount));      
+      if (visionState->detect) {
+        detectedCount++;
         Serial.print("  || detected");
         Serial.print("  label:");
-        Serial.print(vision_state->vision_result[0].lable);
+        Serial.print(visionState->visionResult[0].lable);
         if (VISION_TYPE != VISION_COLOR_RECOGNITION) {
           Serial.print("  x:");
-          Serial.print(vision_state->vision_result[0].x_value);
+          Serial.print(visionState->visionResult[0].xValue);
           Serial.print("  y:");
-          Serial.print(vision_state->vision_result[0].y_value);
+          Serial.print(visionState->visionResult[0].yValue);
           Serial.print("  width:");
-          Serial.print(vision_state->vision_result[0].width);
+          Serial.print(visionState->visionResult[0].width);
           Serial.print("  height:");
-          Serial.print(vision_state->vision_result[0].height);
+          Serial.print(visionState->visionResult[0].height);
         } else {
           Serial.print("  r:");
-          Serial.print(vision_state->vision_result[0].color_r_value);
+          Serial.print(visionState->visionResult[0].colorRValue);
           Serial.print("  g:");
-          Serial.print(vision_state->vision_result[0].color_g_value);
+          Serial.print(visionState->visionResult[0].colorGValue);
           Serial.print("  b:");
-          Serial.print(vision_state->vision_result[0].color_b_value);
+          Serial.print(visionState->visionResult[0].colorBValue);
         }
       } else {
         Serial.print("  || undetected");
